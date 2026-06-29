@@ -16,7 +16,7 @@
 static char list[MAX][4096];
 static int n,sel,top_idx;
 static char current_dir[4096];
-static char wallsetter[256] = "feh";
+static char wallsetter[256] = "nsxiv";
 static int first_time = 1;
 
 static int compare(const void *a, const void *b) {
@@ -210,7 +210,10 @@ static void set_wallpaper_from_file(const char *file) {
                 close(devnull);
             }
 
-            if (strcmp(wallsetter, "feh") == 0) {
+            if (strcmp(wallsetter, "nsxiv") == 0) {
+                char *args[] = {"nsxiv", "-B", (char*)file, NULL};
+                execvp("nsxiv", args);
+            } else if (strcmp(wallsetter, "feh") == 0) {
                 char *args[] = {"feh", "--bg-scale", (char*)file, NULL};
                 execvp("feh", args);
             } else if (strcmp(wallsetter, "swaybg") == 0) {
@@ -274,12 +277,12 @@ static void change_config() {
     }
 
     printf("\nCurrent wallpaper setter: %s\n", wallsetter);
-    printf("Enter new setter (feh, swaybg, or xwallpaper): ");
+    printf("Enter new setter (nsxiv, feh, swaybg, or xwallpaper): ");
     fflush(stdout);
     char new_setter[256];
     if (fgets(new_setter, sizeof(new_setter), stdin)) {
         new_setter[strcspn(new_setter, "\n")] = 0;
-        if (strlen(new_setter) > 0 && (strcmp(new_setter, "feh") == 0 || strcmp(new_setter, "swaybg") == 0 || strcmp(new_setter, "xwallpaper") == 0))
+        if (strlen(new_setter) > 0 && (strcmp(new_setter, "nsxiv") == 0 || strcmp(new_setter, "feh") == 0 || strcmp(new_setter, "swaybg") == 0 || strcmp(new_setter, "xwallpaper") == 0))
             strcpy(wallsetter, new_setter);
     }
 
@@ -319,15 +322,17 @@ static void first_time_setup() {
         expand_path(current_dir);
     }
 
-    printf("\nchoose wallpaper app (1 for feh, 2 for swaybg, 3 for xwallpaper): ");
+    printf("\nchoose wallpaper app (1 for nsxiv, 2 for feh, 3 for swaybg, 3 for xwallpaper): ");
     fflush(stdout);
     fgets(choice, sizeof(choice), stdin);
     if (choice[0] == '2')
-        strcpy(wallsetter, "swaybg");
+        strcpy(wallsetter, "feh");
     else if (choice[0] == '3')
+        strcpy(wallsetter, "swaybg");
+    else if (choice[0] == '4')
         strcpy(wallsetter, "xwallpaper");
     else
-        strcpy(wallsetter, "feh");
+        strcpy(wallsetter, "nsxiv");
 
     save_config();
     first_time = 0;
