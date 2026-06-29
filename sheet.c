@@ -303,7 +303,6 @@ static void first_time_setup() {
     char default_dir[4096];
     snprintf(default_dir, sizeof(default_dir), "%s/Pictures", getenv("HOME"));
 
-    printf("Welcome to sheet!\n\n");
     printf("Use default directory (%s)? (y/n): ", default_dir);
     fflush(stdout);
 
@@ -320,7 +319,7 @@ static void first_time_setup() {
         expand_path(current_dir);
     }
 
-    printf("\nChoose wallpaper setter (1 for feh, 2 for swaybg, 3 for xwallpaper): ");
+    printf("\nchoose wallpaper app (1 for feh, 2 for swaybg, 3 for xwallpaper): ");
     fflush(stdout);
     fgets(choice, sizeof(choice), stdin);
     if (choice[0] == '2')
@@ -333,7 +332,7 @@ static void first_time_setup() {
     save_config();
     first_time = 0;
 
-    printf("\nPress any key to launch...");
+    printf("\npress any key to launch...");
     fflush(stdout);
     getchar();
 
